@@ -13,8 +13,10 @@ describe "remind", ->
         require("../src/remind")(@robot)
 
     it "registers a respond listener", ->
-        expect(@robot.respond).to.have.been.calledWith(/remind cancel/i)
         expect(@robot.respond).to.have.been.calledWith(/remind( me)? (.+)/i)
+        expect(@robot.respond).to.have.been.calledWith(/remind cancel/i)
+        expect(@robot.respond).to.have.been.calledWith(/remind( me)? now/i)
+        expect(@robot.respond).to.have.been.calledWith(/remind clear/i)
 
     it "registers a hear listener", ->
         expect(@robot.hear).to.have.been.calledWith(/(.+)/i)

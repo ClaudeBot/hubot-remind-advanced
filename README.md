@@ -40,6 +40,8 @@ Command | Description
 --- | ---
 hubot remind [me] `note` | Creates a new reminder using `note`
 hubot remind cancel | Cancels the reminder operation
+hubot remind [me] now | Returns all your reminders
+hubot remind clear | Clears all your reminders
 
 
 ## Sample Interaction
