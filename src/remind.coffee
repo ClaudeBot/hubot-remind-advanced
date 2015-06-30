@@ -87,7 +87,7 @@ module.exports = (robot) ->
         return unless Reminder.pending.length isnt 0
 
         chronoDate = chrono.parse res.match[1]
-        return unless chronoDate.length isnt 0 # Should probably hanlde this?
+        return unless chronoDate.length isnt 0 # Should probably handle this?
 
         executionDate = chronoDate[0].start.date()
         if reminder = Reminder.complete res.message.user, executionDate
