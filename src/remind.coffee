@@ -7,6 +7,8 @@
 # Commands:
 #   hubot remind (me) <note> - Creates a new reminder using <note>
 #   hubot remind cancel - Cancels the reminder operation
+#   hubot remind (me) now - Returns all your reminders
+#   hubot remind clear - Clears all your reminders
 #
 # Author:
 #   MrSaints
@@ -14,6 +16,9 @@
 # Notes:
 #   "tomorrow" doesn't work between 12-4AM because
 #   the developer of `chrono-node` lives in a strange planet
+#
+#   Terminating the listeners early because of their
+#   "colliding" regular expressions
 
 chrono = require "chrono-node"
 moment = require "moment"
@@ -23,6 +28,7 @@ HUBOT_REMIND_KEY = process.env.HUBOT_REMIND_KEY or "_remind"
 class Reminder
     constructor: (@callback) ->
         @pending = []
+        @crons = []
 
     addPending: (user, message) ->
         reminder = @getPending user
@@ -33,7 +39,6 @@ class Reminder
 
     cancelPending: (user) ->
         if reminder = @getPending user
-            console.debug "hubot-remind-advanced: Reminder cancelled."
             @pending.splice @pending.indexOf(reminder), 1
             return true
         false
@@ -45,17 +50,22 @@ class Reminder
 
     complete: (user, executionDate) ->
         if reminder = @getPending user
-            console.debug "hubot-remind-advanced: Reminder created."
             @addCron reminder[0], reminder[1], executionDate
             @pending.splice @pending.indexOf(reminder), 1
             return [reminder[0], reminder[1], executionDate]
         false
 
     addCron: (user, message, executionDate) ->
-        console.debug "hubot-remind-advanced: Adding cron job."
-        setTimeout =>
+        console.log "hubot-remind-advanced: Adding cron job."
+        newTask = setTimeout =>
             @callback user, message
         , moment(executionDate).diff()
+        @crons.push newTask
+
+    clearCron: ->
+        for cron in @crons
+            clearTimeout cron
+        @crons = []
 
 
 module.exports = (robot) ->
@@ -73,6 +83,29 @@ module.exports = (robot) ->
             res.reply "Your reminder operation has been cancelled."
         else
             res.reply "You have no reminders pending creation."
+        res.message.done = true
+
+    robot.respond /remind clear/i, (res) ->
+        Reminder.clearCron()
+        cleared = 0
+        for reminder in BrainReminders()
+            if reminder[0].id is res.message.user.id
+                ++cleared
+                BrainReminders().splice reminder, 1
+
+        if cleared isnt 0
+            res.reply "#{cleared} of your reminder(s) have been cleared."
+        else
+            res.reply "You have no reminders."
+        res.message.done = true
+
+    robot.respond /remind( me)? now/i, (res) ->
+        message = ""
+        for reminder in BrainReminders()
+            if reminder[0].id is res.message.user.id
+                message += "[#{moment(reminder[2]).fromNow()}] "
+                message += "#{reminder[1]}\n"
+        res.reply message if message.length isnt 0
         res.message.done = true
 
     robot.respond /remind( me)? (.+)/i, (res) ->
