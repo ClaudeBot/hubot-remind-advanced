@@ -1,0 +1,48 @@
+{
+  "name": "hubot-remind-advanced",
+  "description": "A Hubot script for creating quick reminders through natural language.",
+  "version": "0.0.0",
+  "author": "Ian Lai <ian@fyianlai.com>",
+  "license": "MIT",
+  "keywords": [
+    "hubot",
+    "hubot-scripts",
+    "remind",
+    "remember",
+    "notes",
+    "natural language",
+    "chrono"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ClaudeBot/hubot-remind-advanced.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ClaudeBot/hubot-remind-advanced/issues"
+  },
+  "dependencies": {
+    "chrono-node": "^1.0.6",
+    "moment": "^2.10.3"
+  },
+  "peerDependencies": {
+    "hubot": "2.x"
+  },
+  "devDependencies": {
+    "chai": "^3.0.0",
+    "coffee-script": "^1.9.3",
+    "grunt": "^0.4.5",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-mocha-test": "~0.12.7",
+    "grunt-release": "~0.13.0",
+    "hubot": "2.x",
+    "matchdep": "~0.3.0",
+    "mocha": "^2.1.0",
+    "sinon": "^1.13.0",
+    "sinon-chai": "^2.7.0"
+  },
+  "main": "index.coffee",
+  "scripts": {
+    "test": "grunt test"
+  }
+}
