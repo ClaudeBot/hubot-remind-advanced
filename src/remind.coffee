@@ -78,7 +78,7 @@ module.exports = (robot) ->
         old = [user, message, executionDate]
         BrainReminders().splice BrainReminders().indexOf old, 1
 
-    robot.respond /remind( me)? (.+)/i, id: "remind.start", (res) ->
+    robot.respond /remind( me)? (.+)/i, id: "remind.new", (res) ->
         [status, reminder] = Reminder.addPending res.message.user, res.match[2]
         if status isnt false
             res.reply "When should I remind you?"
