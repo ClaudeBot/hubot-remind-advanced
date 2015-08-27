@@ -78,11 +78,28 @@ module.exports = (robot) ->
         old = [user, message, executionDate]
         BrainReminders().splice BrainReminders().indexOf old, 1
 
+    robot.respond /remind( me)? (.+)/i, id: "remind.start", (res) ->
+        [status, reminder] = Reminder.addPending res.message.user, res.match[2]
+        if status isnt false
+            res.reply "When should I remind you?"
+        else
+            res.reply "You have a reminder pending creation. When should I remind you \"#{reminder[1]}\" ?"
+        res.finish()
+
     robot.respond /remind cancel/i, id: "remind.cancel", (res) ->
         if Reminder.cancelPending res.message.user
             res.reply "Your reminder operation has been cancelled."
         else
             res.reply "You have no reminders pending creation."
+        res.finish()
+
+    robot.respond /remind( me)? now/i, id: "remind.list", (res) ->
+        message = ""
+        for reminder in BrainReminders()
+            if reminder[0].id is res.message.user.id
+                message += "[#{moment(reminder[2]).fromNow()}] "
+                message += "#{reminder[1]}\n"
+        res.reply message if message.length isnt 0
         res.finish()
 
     robot.respond /remind clear/i, id: "remind.clear", (res) ->
@@ -97,23 +114,6 @@ module.exports = (robot) ->
             res.reply "#{cleared} of your reminder(s) have been cleared."
         else
             res.reply "You have no reminders."
-        res.finish()
-
-    robot.respond /remind( me)? now/i, id: "remind.list", (res) ->
-        message = ""
-        for reminder in BrainReminders()
-            if reminder[0].id is res.message.user.id
-                message += "[#{moment(reminder[2]).fromNow()}] "
-                message += "#{reminder[1]}\n"
-        res.reply message if message.length isnt 0
-        res.finish()
-
-    robot.respond /remind( me)? (.+)/i, id: "remind.start", (res) ->
-        [status, reminder] = Reminder.addPending res.message.user, res.match[2]
-        if status isnt false
-            res.reply "When should I remind you?"
-        else
-            res.reply "You have a reminder pending creation. When should I remind you \"#{reminder[1]}\" ?"
         res.finish()
 
     robot.hear /(.+)/i, id: "remind.process", (res) ->
