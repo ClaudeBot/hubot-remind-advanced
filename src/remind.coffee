@@ -83,7 +83,7 @@ module.exports = (robot) ->
             res.reply "Your reminder operation has been cancelled."
         else
             res.reply "You have no reminders pending creation."
-        res.message.done = true
+        res.finish()
 
     robot.respond /remind clear/i, id: "remind.clear", (res) ->
         Reminder.clearCron()
@@ -97,7 +97,7 @@ module.exports = (robot) ->
             res.reply "#{cleared} of your reminder(s) have been cleared."
         else
             res.reply "You have no reminders."
-        res.message.done = true
+        res.finish()
 
     robot.respond /remind( me)? now/i, id: "remind.list", (res) ->
         message = ""
@@ -106,7 +106,7 @@ module.exports = (robot) ->
                 message += "[#{moment(reminder[2]).fromNow()}] "
                 message += "#{reminder[1]}\n"
         res.reply message if message.length isnt 0
-        res.message.done = true
+        res.finish()
 
     robot.respond /remind( me)? (.+)/i, id: "remind.start", (res) ->
         [status, reminder] = Reminder.addPending res.message.user, res.match[2]
@@ -114,7 +114,7 @@ module.exports = (robot) ->
             res.reply "When should I remind you?"
         else
             res.reply "You have a reminder pending creation. When should I remind you \"#{reminder[1]}\" ?"
-        res.message.done = true
+        res.finish()
 
     robot.hear /(.+)/i, id: "remind.process", (res) ->
         return unless Reminder.pending.length isnt 0
