@@ -74,7 +74,7 @@ module.exports = (robot) ->
 
     Reminder = new Reminder (user, message, executionDate) ->
         message = "Reminder for #{user.name}: #{message}"
-        robot.send user, message
+        robot.send {room: user.room, user: user}, message
         old = [user, message, executionDate]
         BrainReminders().splice BrainReminders().indexOf old, 1
 
