@@ -5,8 +5,10 @@ chai.use require "sinon-chai"
 expect = chai.expect
 
 describe "remind", ->
-    beforeEach ->
+    before ->
         @robot =
+            brain:
+                on: sinon.spy()
             respond: sinon.spy()
             hear: sinon.spy()
 
@@ -20,3 +22,6 @@ describe "remind", ->
 
     it "registers a hear listener", ->
         expect(@robot.hear).to.have.been.calledWith(/(.+)/i)
+
+    it "registers a brain event listener", ->
+        expect(@robot.brain.on).to.have.been.calledWith("loaded")
