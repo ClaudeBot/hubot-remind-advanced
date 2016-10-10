@@ -73,7 +73,7 @@ module.exports = (robot) ->
         robot.brain.data[HUBOT_REMIND_KEY] or= []
 
     Reminder = new Reminder (user, message, executionDate) ->
-        message = "Reminder for #{user.name}: #{message}"
+        message = "Reminder for @#{user.name}: #{message}"
         robot.send {room: user.room, user: user}, message
         old = [user, message, executionDate]
         BrainReminders().splice BrainReminders().indexOf old, 1
