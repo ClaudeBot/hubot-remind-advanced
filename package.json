@@ -21,8 +21,8 @@
     "url": "https://github.com/ClaudeBot/hubot-remind-advanced/issues"
   },
   "dependencies": {
-    "chrono-node": "^1.0.6",
-    "moment": "^2.10.3"
+    "chrono-node": "^1.2.4",
+    "moment": "^2.15.1"
   },
   "peerDependencies": {
     "hubot": "2.x"
