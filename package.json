@@ -1,7 +1,7 @@
 {
   "name": "hubot-remind-advanced",
   "description": "A Hubot script for creating quick reminders through natural language.",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "Ian Lai <os@fyianlai.com>",
   "license": "MIT",
   "keywords": [
