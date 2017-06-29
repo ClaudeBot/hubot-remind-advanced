@@ -116,19 +116,21 @@ module.exports = (robot) ->
             res.reply "You have a reminder pending creation. When should I remind you \"#{reminder[1]}\" ?"
         res.finish()
 
-    robot.hear /(.+)/i, id: "remind.process", (res) ->
+    robot.listen(
+      (message) ->
         return unless Reminder.pending.length isnt 0
-
-        chronoDate = chrono.parse res.match[1]
+        chronoDate = chrono.parse message.text
         return unless chronoDate.length isnt 0 # Should probably handle this?
-
-        executionDate = chronoDate[0].start.date()
-        if reminder = Reminder.complete res.message.user, executionDate
+        chronoDate
+      (response) ->
+        executionDate = response.match[0].start.date()
+        if reminder = Reminder.complete response.message.user, executionDate
             humanized = moment(executionDate).fromNow()
-            res.reply "Reminder added. I'll remind you #{humanized}."
+            response.reply "Reminder added. I'll remind you #{humanized}."
 
             BrainReminders().push reminder
             robot.brain.save()
+    )
 
     robot.brain.on "loaded", ->
         robot.logger.info "hubot-remind-advanced: Loading reminders from brain."

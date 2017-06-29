@@ -10,7 +10,7 @@ describe "remind", ->
             brain:
                 on: sinon.spy()
             respond: sinon.spy()
-            hear: sinon.spy()
+            listen: sinon.spy()
 
         require("../src/remind")(@robot)
 
@@ -20,8 +20,8 @@ describe "remind", ->
         expect(@robot.respond).to.have.been.calledWith(/remind( me)? now/i)
         expect(@robot.respond).to.have.been.calledWith(/remind clear/i)
 
-    it "registers a hear listener", ->
-        expect(@robot.hear).to.have.been.calledWith(/(.+)/i)
+    it "registers a custom listener", ->
+        expect(@robot.listen).to.have.been.called
 
     it "registers a brain event listener", ->
         expect(@robot.brain.on).to.have.been.calledWith("loaded")
